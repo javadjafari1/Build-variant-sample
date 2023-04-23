@@ -15,7 +15,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="${name}"
+            android:label="BuildVariantSample"
             android:theme="@style/Theme.BuildVariantsSample">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

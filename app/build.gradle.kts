@@ -19,6 +19,14 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("myreleasekey.keystore")
+            storePassword = "password"
+            keyAlias = "MyReleaseKey"
+            keyPassword = "password"
+        }
+    }
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -52,9 +60,13 @@ android {
         }
         create("playStore") {
             dimension = flavorDimensionList[1]
+            buildConfigField("String", "url", "\"playStoreUrl\"")
         }
         create("cafeBazaar") {
             dimension = flavorDimensionList[1]
+            buildConfigField("String", "url", "\"playStoreUrl\"")
+            buildConfigField("Boolean", "isDebug", "false")
+            buildConfigField("Integer", "version", "2000")
         }
 
 //        Way 1
@@ -104,6 +116,12 @@ android {
 //            }
 //        }
     }
+    sourceSets.getByName("cafeBazaar") {
+        kotlin.setSrcDirs(listOf("src/playStoreCafeBazaarShared"))
+    }
+    sourceSets.getByName("playStore") {
+        kotlin.setSrcDirs(listOf("src/playStoreCafeBazaarShared"))
+    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -125,6 +143,7 @@ android {
     }
 }
 
+val liveCafeBazaarImplementation: Configuration by configurations.creating
 dependencies {
 
     implementation(libs.core.ktx)
@@ -135,6 +154,10 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
+    liveCafeBazaarImplementation(libs.coil.compose)
+    "liveImplementation"(libs.coil.compose)
+    debugImplementation(libs.coil.compose)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
